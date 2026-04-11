@@ -27,6 +27,9 @@
 #include "src/platform/common.h"
 #include "src/task_pool.h"
 #include "src/video.h"
+#ifdef SUNSHINE_BUILD_JETSON
+#include "jetson/nvv4l2_encode_device.h"
+#endif
 #include "vaapi.h"
 #include "x11grab.h"
 

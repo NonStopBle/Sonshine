@@ -27,6 +27,9 @@
 #include "src/utility.h"
 #include "src/video.h"
 #include "vaapi.h"
+#ifdef SUNSHINE_BUILD_JETSON
+#include "jetson/nvv4l2_encode_device.h"
+#endif
 #include "vulkan_encode.h"
 #include "wayland.h"
 
@@ -1250,6 +1253,7 @@ namespace platf {
         }
 #endif
 
+        // For other system mem types, return base device
         return std::make_unique<avcodec_encode_device_t>();
       }
 
@@ -1386,6 +1390,13 @@ namespace platf {
 #ifdef SUNSHINE_BUILD_CUDA
         if (mem_type == mem_type_e::cuda) {
           return cuda::make_avcodec_gl_encode_device(width, height, img_offset_x, img_offset_y);
+        }
+#endif
+
+#ifdef SUNSHINE_BUILD_JETSON
+        if (mem_type == mem_type_e::drm) {
+          // Returning base device for now, Path B native session will handle the conversion
+          return std::make_unique<avcodec_encode_device_t>();
         }
 #endif
 

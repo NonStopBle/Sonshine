@@ -401,4 +401,23 @@ namespace system_tray {
   }
 
 }  // namespace system_tray
+#else
+#include <string>
+namespace system_tray {
+  void tray_open_ui_cb([[maybe_unused]] struct tray_menu *item) {}
+  void tray_donate_github_cb([[maybe_unused]] struct tray_menu *item) {}
+  void tray_donate_patreon_cb([[maybe_unused]] struct tray_menu *item) {}
+  void tray_donate_paypal_cb([[maybe_unused]] struct tray_menu *item) {}
+  void tray_reset_display_device_config_cb([[maybe_unused]] struct tray_menu *item) {}
+  void tray_restart_cb([[maybe_unused]] struct tray_menu *item) {}
+  void tray_quit_cb([[maybe_unused]] struct tray_menu *item) {}
+  int init_tray() { return 0; }
+  int process_tray_events() { return 0; }
+  int end_tray() { return 0; }
+  void update_tray_playing([[maybe_unused]] std::string app_name) {}
+  void update_tray_pausing([[maybe_unused]] std::string app_name) {}
+  void update_tray_stopped([[maybe_unused]] std::string app_name) {}
+  void update_tray_require_pin() {}
+  int init_tray_threaded() { return 0; }
+}  // namespace system_tray
 #endif

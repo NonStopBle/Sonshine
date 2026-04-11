@@ -1,0 +1,153 @@
+include_directories(SYSTEM /usr/src/jetson_multimedia_api/include)
+# cmake/dependencies/jetson.cmake
+# Detects NVIDIA Jetson L4T environment and sets SUNSHINE_BUILD_JETSON.
+# Included by cmake/compile_definitions/linux.cmake on aarch64 Linux.
+
+set(SUNSHINE_BUILD_JETSON OFF CACHE BOOL "Build with Jetson nvv4l2 hardware encoder support")
+
+# Auto-detect: check for L4T Multimedia API headers
+find_path(L4T_MULTIMEDIA_INCLUDE_DIR
+        NAMES NvVideoEncoder.h nvbuf_utils.h
+        PATHS
+        /usr/include
+        /usr/local/include
+        /usr/src/jetson_multimedia_api/include
+        DOC "Jetson L4T Multimedia API include directory"
+)
+
+find_library(L4T_NVMEDIA_LIB
+  NAMES nvmedia
+  PATHS /usr/lib /usr/lib/aarch64-linux-gnu /usr/lib/aarch64-linux-gnu/tegra
+  DOC "Jetson libnvmedia"
+)
+
+find_library(L4T_NVBUF_LIB
+  NAMES nvbuf_utils
+  PATHS /usr/lib /usr/lib/aarch64-linux-gnu /usr/lib/aarch64-linux-gnu/tegra
+  DOC "Jetson libnvbuf_utils"
+)
+
+find_library(L4T_NVV4L2_LIB
+  NAMES nvv4l2
+  PATHS /usr/lib /usr/lib/aarch64-linux-gnu /usr/lib/aarch64-linux-gnu/tegra
+  DOC "Jetson libnvv4l2"
+)
+
+find_library(L4T_NVOS_LIB
+  NAMES nvos
+  PATHS /usr/lib /usr/lib/aarch64-linux-gnu /usr/lib/aarch64-linux-gnu/tegra
+  DOC "Jetson libnvos"
+)
+
+find_library(L4T_NVBUFSURFACE_LIB
+  NAMES nvbufsurface
+  PATHS /usr/lib /usr/lib/aarch64-linux-gnu /usr/lib/aarch64-linux-gnu/tegra
+  DOC "Jetson libnvbufsurface"
+)
+
+find_library(L4T_NVBUFSURFTRANS_LIB
+  NAMES nvbufsurftransform
+  PATHS /usr/lib /usr/lib/aarch64-linux-gnu /usr/lib/aarch64-linux-gnu/tegra
+  DOC "Jetson libnvbufsurftransform"
+)
+
+find_path(L4T_SAMPLES_CLASS_DIR
+  NAMES NvVideoEncoder.cpp
+  PATHS /home/orin/sunshine/sample_encode/common/classes
+        /usr/src/jetson_multimedia_api/samples/common/classes
+  DOC "Jetson L4T Multimedia API samples classes directory"
+)
+if(L4T_MULTIMEDIA_INCLUDE_DIR)
+    include_directories(SYSTEM ${L4T_MULTIMEDIA_INCLUDE_DIR})
+endif()
+
+if(L4T_MULTIMEDIA_INCLUDE_DIR AND L4T_NVMEDIA_LIB AND L4T_NVV4L2_LIB)
+    set(SUNSHINE_BUILD_JETSON ON CACHE BOOL "" FORCE)
+    message(STATUS "[Jetson] L4T Multimedia API found at: ${L4T_MULTIMEDIA_INCLUDE_DIR}")
+    message(STATUS "[Jetson] nvmedia lib: ${L4T_NVMEDIA_LIB}")
+    if(L4T_NVBUF_LIB)
+        message(STATUS "[Jetson] nvbuf_utils lib: ${L4T_NVBUF_LIB}")
+    endif()
+else()
+    # Check for just the V4L2 M2M path (no full L4T Multimedia API needed for Path A)
+    find_path(V4L2_INCLUDE_DIR
+            NAMES linux/videodev2.h
+            PATHS /usr/include
+            DOC "V4L2 kernel headers"
+    )
+    find_library(V4L2_LIB
+            NAMES v4l2
+            PATHS /usr/lib /usr/lib/aarch64-linux-gnu
+            DOC "libv4l2"
+    )
+    if(V4L2_INCLUDE_DIR AND V4L2_LIB AND CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+        set(SUNSHINE_BUILD_JETSON ON CACHE BOOL "" FORCE)
+        message(STATUS "[Jetson] V4L2 M2M path available (Path A only, no NvVideoEncoder)")
+    else()
+        message(STATUS "[Jetson] L4T Multimedia API not found — nvv4l2 encoder disabled")
+    endif()
+endif()
+
+if(SUNSHINE_BUILD_JETSON)
+    add_compile_definitions(SUNSHINE_BUILD_JETSON)
+
+    if(L4T_MULTIMEDIA_INCLUDE_DIR)
+        include_directories(SYSTEM ${L4T_MULTIMEDIA_INCLUDE_DIR})
+        include_directories(SYSTEM /usr/src/jetson_multimedia_api/include)
+        set(HAVE_NVVIDEOENCO ON)
+        add_compile_definitions(HAVE_NVVIDEOENCO)
+    endif()
+
+    # V4L2 is always needed
+    if(V4L2_LIB)
+        list(APPEND PLATFORM_LIBRARIES ${V4L2_LIB})
+    else()
+        find_library(V4L2_LIB NAMES v4l2 PATHS /usr/lib /usr/lib/aarch64-linux-gnu)
+        if(V4L2_LIB)
+            list(APPEND PLATFORM_LIBRARIES ${V4L2_LIB})
+        endif()
+    endif()
+
+    if(L4T_NVMEDIA_LIB)
+        list(APPEND PLATFORM_LIBRARIES ${L4T_NVMEDIA_LIB})
+    endif()
+    if(L4T_NVBUF_LIB)
+        list(APPEND PLATFORM_LIBRARIES ${L4T_NVBUF_LIB})
+    endif()
+    if(L4T_NVV4L2_LIB)
+        list(APPEND PLATFORM_LIBRARIES ${L4T_NVV4L2_LIB})
+    endif()
+    if(L4T_NVOS_LIB)
+        list(APPEND PLATFORM_LIBRARIES ${L4T_NVOS_LIB})
+    endif()
+    if(L4T_NVBUFSURFACE_LIB)
+        list(APPEND PLATFORM_LIBRARIES ${L4T_NVBUFSURFACE_LIB})
+    endif()
+    if(L4T_NVBUFSURFTRANS_LIB)
+        list(APPEND PLATFORM_LIBRARIES ${L4T_NVBUFSURFTRANS_LIB})
+    endif()
+
+    list(APPEND PLATFORM_TARGET_FILES
+            "${CMAKE_SOURCE_DIR}/src/platform/linux/jetson/nvv4l2_encode_device.h"
+            "${CMAKE_SOURCE_DIR}/src/platform/linux/jetson/nvv4l2_encode_device.cpp"
+            "${CMAKE_SOURCE_DIR}/src/platform/linux/jetson/nvv4l2_encoder.h"
+    )
+
+    if(L4T_SAMPLES_CLASS_DIR)
+        list(APPEND PLATFORM_TARGET_FILES
+                "${L4T_SAMPLES_CLASS_DIR}/NvElement.cpp"
+                "${L4T_SAMPLES_CLASS_DIR}/NvElementProfiler.cpp"
+                "${L4T_SAMPLES_CLASS_DIR}/NvV4l2Element.cpp"
+                "${L4T_SAMPLES_CLASS_DIR}/NvV4l2ElementPlane.cpp"
+                "${L4T_SAMPLES_CLASS_DIR}/NvVideoEncoder.cpp"
+                "${L4T_SAMPLES_CLASS_DIR}/NvLogging.cpp"
+                "${L4T_SAMPLES_CLASS_DIR}/NvBuffer.cpp"
+        )
+    endif()
+
+    if(HAVE_NVVIDEOENCO)
+        list(APPEND PLATFORM_TARGET_FILES
+                "${CMAKE_SOURCE_DIR}/src/platform/linux/jetson/nvv4l2_encoder.cpp"
+        )
+    endif()
+endif()

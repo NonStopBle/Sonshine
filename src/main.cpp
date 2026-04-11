@@ -179,7 +179,9 @@ int main(int argc, char *argv[]) {
   log_publisher_data();
 
   // Log modified_config_settings
-  config::log_config_settings(config::modified_config_settings, false);
+  for (auto &[name, val] : config::modified_config_settings) {
+    BOOST_LOG(info) << "config: '"sv << name << "' = "sv << val;
+  }
   config::modified_config_settings.clear();
 
   if (!config::sunshine.cmd.name.empty()) {

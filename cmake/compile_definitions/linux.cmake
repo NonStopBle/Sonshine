@@ -1,6 +1,15 @@
 # linux specific compile definitions
 
-if(FREEBSD)
+include_directories(SYSTEM /usr/src/jetson_multimedia_api/include)
+
+# Jetson detection (aarch64 Linux only)
+if(UNIX AND NOT APPLE AND NOT FREEBSD AND CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    include("${CMAKE_MODULE_PATH}/dependencies/jetson.cmake")
+endif()
+
+if(SUNSHINE_BUILD_JETSON)
+    add_compile_definitions(SUNSHINE_PLATFORM="jetson")
+elseif(FREEBSD)
     add_compile_definitions(SUNSHINE_PLATFORM="freebsd")
 else()
     add_compile_definitions(SUNSHINE_PLATFORM="linux")

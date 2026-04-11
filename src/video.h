@@ -234,6 +234,9 @@ namespace video {
 
 #if defined(__linux__) || defined(linux) || defined(__linux) || defined(__FreeBSD__)
   extern encoder_t vaapi;
+  #ifdef SUNSHINE_BUILD_JETSON
+  extern encoder_t nvv4l2;
+  #endif
 #endif
 
 #ifdef __APPLE__

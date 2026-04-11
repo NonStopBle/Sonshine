@@ -18,16 +18,34 @@ IF (NOT WIN32)
             --variable=systemd_user_unit_dir systemd
             OUTPUT_STRIP_TRAILING_WHITESPACE
             OUTPUT_VARIABLE SYSTEMD_USER_UNIT_INSTALL_DIR)
+        if(NOT SYSTEMD_USER_UNIT_INSTALL_DIR)
+            execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE}
+                --variable=systemduserunitdir systemd
+                OUTPUT_STRIP_TRAILING_WHITESPACE
+                OUTPUT_VARIABLE SYSTEMD_USER_UNIT_INSTALL_DIR)
+        endif()
 
         execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE}
             --variable=systemd_system_unit_dir systemd
             OUTPUT_STRIP_TRAILING_WHITESPACE
             OUTPUT_VARIABLE SYSTEMD_SYSTEM_UNIT_INSTALL_DIR)
+        if(NOT SYSTEMD_SYSTEM_UNIT_INSTALL_DIR)
+            execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE}
+                --variable=systemdsystemunitdir systemd
+                OUTPUT_STRIP_TRAILING_WHITESPACE
+                OUTPUT_VARIABLE SYSTEMD_SYSTEM_UNIT_INSTALL_DIR)
+        endif()
 
         execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE}
             --variable=modules_load_dir systemd
             OUTPUT_STRIP_TRAILING_WHITESPACE
             OUTPUT_VARIABLE SYSTEMD_MODULES_LOAD_DIR)
+        if(NOT SYSTEMD_MODULES_LOAD_DIR)
+            execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE}
+                --variable=modulesloaddir systemd
+                OUTPUT_STRIP_TRAILING_WHITESPACE
+                OUTPUT_VARIABLE SYSTEMD_MODULES_LOAD_DIR)
+        endif()
 
         mark_as_advanced(
                 SYSTEMD_USER_UNIT_INSTALL_DIR

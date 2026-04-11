@@ -232,7 +232,9 @@ namespace platf {
     dxgi,  ///< DXGI
     cuda,  ///< CUDA
     videotoolbox,  ///< VideoToolbox
+    dma,  ///< DMA-BUF (Jetson NvBufSurface)
     vulkan,  ///< Vulkan
+    drm,  ///< DRM/KMS (Jetson DMA-BUF zero-copy)
     unknown  ///< Unknown
   };
 
@@ -383,6 +385,11 @@ namespace platf {
     std::int32_t row_pitch {};
 
     std::optional<std::chrono::steady_clock::time_point> frame_timestamp;
+
+#ifdef SUNSHINE_BUILD_JETSON
+    int buf_fd = -1;  ///< DMA-BUF fd for Jetson zero-copy encoder path (-1 if not a DMA-BUF)
+    mem_type_e mem_type = mem_type_e::system;  ///< Memory type of this frame
+#endif
 
     virtual ~img_t() = default;
   };

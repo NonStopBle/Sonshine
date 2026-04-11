@@ -19,13 +19,6 @@ namespace config {
   // track modified config options
   inline std::unordered_map<std::string, std::string> modified_config_settings;
 
-  // sensitive values that should be redacted from logging
-  inline constexpr std::array redacted_config = {
-    "csrf_allowed_origins"
-  };
-
-  void log_config_settings(const std::unordered_map<std::string, std::string> &vars, bool save);
-
   struct video_t {
     // ffmpeg params
     int qp;  // higher == more compression and less quality
@@ -154,6 +147,17 @@ namespace config {
 
     int max_bitrate;  // Maximum bitrate, sets ceiling in kbps for bitrate requested from client
     double minimum_fps_target;  ///< Lowest framerate that will be used when streaming. Range 0-1000, 0 = half of client's requested framerate.
+
+#ifdef SUNSHINE_BUILD_JETSON
+    struct {
+      int preset = 2;          ///< Encoder preset 1..4 (1=fast/low quality, 4=slow/high quality)
+      bool max_perf = true;    ///< nvv4l2h264enc maxperf-enable — recommended for streaming
+      int idr_interval = 0;   ///< IDR interval: 0 = on-demand only; >0 = also periodic (seconds)
+      bool two_pass_cbr = true;  ///< Two-pass CBR — reduces bitrate spikes, adds ~1 frame latency
+      bool insert_sps_pps = true;  ///< Insert SPS/PPS before every IDR — required by most Moonlight clients
+      int rc_mode = 1;         ///< Rate control: 0 = VBR, 1 = CBR (recommended for streaming)
+    } nvv4l2;
+#endif
   };
 
   struct audio_t {
