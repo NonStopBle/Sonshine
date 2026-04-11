@@ -1,6 +1,6 @@
 <div align="center">
   <img src="sunshine.png"  alt="Sunshine icon"/>
-  <h1 align="center">Sonshine</h1>
+  <h1 align="center">Sunshine</h1>
   <h4 align="center">Self-hosted game stream host for Moonlight.(Modify Sunshine to support NVIDIA Jetson Series)</h4>
 </div>
 
