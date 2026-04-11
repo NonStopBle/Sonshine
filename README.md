@@ -27,6 +27,23 @@ encoding. Software encoding is also available. You can connect to Sunshine from 
 devices. A web UI is provided to allow configuration, and client pairing, from your favorite web browser. Pair from
 the local server or any mobile device.
 
+### NVIDIA Jetson Orin Support
+
+This fork adds native **Jetson nvv4l2 hardware encoder** support for NVIDIA Jetson Orin NX and AGX Orin, enabling
+low-latency H.264/HEVC streaming to Moonlight clients using the Jetson Multimedia API.
+
+Key features:
+- **NvVideoEncoder (V4L2 M2M)** direct hardware encoding, bypassing FFmpeg's avcodec layer
+- **VIC hardware color conversion** (BGRA to NV12), freeing the CPU
+- **DMA-BUF zero-copy** frame passing to the encoder
+- **Pipelined encode** overlapping CPU+VIC work with NVENC
+- **Web UI configuration** for all encoder settings
+
+Performance on Jetson Orin NX at 1080p: **60 FPS** (60fps target) / **137 FPS** (140fps target).
+
+See [installation.md](installation.md) for build and setup instructions,
+or [JETSON_README.md](JETSON_README.md) for detailed architecture documentation.
+
 LizardByte has the full documentation hosted on [Read the Docs](https://docs.lizardbyte.dev/projects/sunshine)
 
 * [Stable Docs](https://docs.lizardbyte.dev/projects/sunshine/latest/)
@@ -40,17 +57,19 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
         <th>Feature</th>
         <th>FreeBSD</th>
         <th>Linux</th>
+        <th>Jetson Orin</th>
         <th>macOS</th>
         <th>Windows</th>
     </tr>
     <tr>
-        <td colspan="5" align="center"><b>Gamepad Emulation</b><br>
+        <td colspan="6" align="center"><b>Gamepad Emulation</b><br>
         What type of gamepads can be emulated on the host.<br>
         Clients may support other gamepads.
         </td>
     </tr>
     <tr>
         <td>DualShock / DS4 (PlayStation 4)</td>
+        <td>➖</td>
         <td>➖</td>
         <td>➖</td>
         <td>❌</td>
@@ -60,11 +79,13 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
         <td>DualSense / DS5 (PlayStation 5)</td>
         <td>❌</td>
         <td>✅</td>
+        <td>✅</td>
         <td>❌</td>
         <td>❌</td>
     </tr>
     <tr>
         <td>Nintendo Switch Pro</td>
+        <td>✅</td>
         <td>✅</td>
         <td>✅</td>
         <td>❌</td>
@@ -74,6 +95,7 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
         <td>Xbox 360</td>
         <td>➖</td>
         <td>➖</td>
+        <td>➖</td>
         <td>❌</td>
         <td>✅</td>
     </tr>
@@ -81,16 +103,18 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
         <td>Xbox One/Series</td>
         <td>✅</td>
         <td>✅</td>
+        <td>✅</td>
         <td>❌</td>
         <td>❌</td>
     </tr>
     <tr>
-        <td colspan="5" align="center"><b>GPU Encoding</b></td>
+        <td colspan="6" align="center"><b>GPU Encoding</b></td>
     </tr>
     <tr>
         <td>AMD/AMF</td>
         <td>✅ (vaapi)</td>
         <td>✅ (vaapi)</td>
+        <td>➖</td>
         <td>✅ (Video Toolbox)</td>
         <td>✅</td>
     </tr>
@@ -98,6 +122,7 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
         <td>Intel QuickSync</td>
         <td>✅ (vaapi)</td>
         <td>✅ (vaapi)</td>
+        <td>➖</td>
         <td>✅ (Video Toolbox)</td>
         <td>✅</td>
     </tr>
@@ -105,14 +130,24 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
         <td>NVIDIA NVENC</td>
         <td>✅ (vaapi)</td>
         <td>✅ (vaapi)</td>
+        <td>➖</td>
         <td>✅ (Video Toolbox)</td>
         <td>✅</td>
     </tr>
     <tr>
-        <td colspan="5" align="center"><b>Screen Capture</b></td>
+        <td>Jetson nvv4l2</td>
+        <td>➖</td>
+        <td>➖</td>
+        <td>✅ (VIC + NVENC)</td>
+        <td>➖</td>
+        <td>➖</td>
+    </tr>
+    <tr>
+        <td colspan="6" align="center"><b>Screen Capture</b></td>
     </tr>
     <tr>
         <td>DXGI</td>
+        <td>➖</td>
         <td>➖</td>
         <td>➖</td>
         <td>➖</td>
@@ -121,6 +156,7 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
     <tr>
         <td>KMS</td>
         <td>❌</td>
+        <td>✅</td>
         <td>✅</td>
         <td>➖</td>
         <td>➖</td>
@@ -131,11 +167,13 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
         <td>🟡</td>
         <td>➖</td>
         <td>➖</td>
+        <td>➖</td>
     </tr>
     <tr>
         <td>&nbsp;&nbsp;↳ X11 Support</td>
         <td>➖</td>
         <td>✅</td>
+        <td>➖</td>
         <td>➖</td>
         <td>➖</td>
     </tr>
@@ -145,9 +183,11 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
         <td>❌</td>
         <td>➖</td>
         <td>➖</td>
+        <td>➖</td>
     </tr>
     <tr>
         <td>Video Toolbox</td>
+        <td>➖</td>
         <td>➖</td>
         <td>➖</td>
         <td>✅</td>
@@ -159,9 +199,11 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
         <td>✅</td>
         <td>➖</td>
         <td>➖</td>
+        <td>➖</td>
     </tr>
     <tr>
         <td>Windows.Graphics.Capture</td>
+        <td>➖</td>
         <td>➖</td>
         <td>➖</td>
         <td>➖</td>
@@ -172,6 +214,7 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
         <td>➖</td>
         <td>➖</td>
         <td>➖</td>
+        <td>➖</td>
         <td>✅</td>
     </tr>
     <tr>
@@ -179,10 +222,12 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
         <td>➖</td>
         <td>➖</td>
         <td>➖</td>
+        <td>➖</td>
         <td>❌</td>
     </tr>
     <tr>
         <td>X11</td>
+        <td>✅</td>
         <td>✅</td>
         <td>✅</td>
         <td>➖</td>
@@ -204,7 +249,7 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
         <th>Requirement</th>
     </tr>
     <tr>
-        <td rowspan="3">GPU</td>
+        <td rowspan="4">GPU</td>
         <td>AMD: VCE 1.0 or higher, see: <a href="https://github.com/obsproject/obs-amd-encoder/wiki/Hardware-Support">obs-amd hardware support</a></td>
     </tr>
     <tr>
@@ -218,6 +263,9 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
         <td>Nvidia: NVENC enabled cards, see: <a href="https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new">nvenc support matrix</a></td>
     </tr>
     <tr>
+        <td>Jetson: Orin NX or AGX Orin with JetPack 5.1.x (L4T 35.x)</td>
+    </tr>
+    <tr>
         <td rowspan="2">CPU</td>
         <td>AMD: Ryzen 3 or higher</td>
     </tr>
@@ -229,7 +277,7 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
         <td>4GB or more</td>
     </tr>
     <tr>
-        <td rowspan="6">OS</td>
+        <td rowspan="7">OS</td>
         <td>FreeBSD: 14.3+</td>
     </tr>
     <tr>
@@ -246,6 +294,9 @@ LizardByte has the full documentation hosted on [Read the Docs](https://docs.liz
     </tr>
     <tr>
         <td>Windows: 11+ (Windows Server does not support virtual gamepads)</td>
+    </tr>
+    <tr>
+        <td>Jetson: JetPack 5.1.x (L4T 35.x, Ubuntu 20.04) with Clang 18</td>
     </tr>
     <tr>
         <td rowspan="2">Network</td>
