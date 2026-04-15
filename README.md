@@ -1,9 +1,103 @@
+<<<<<<< HEAD
+# irap_sunshine_nvv4l2
+
+
+
+## Getting started
+
+To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+
+Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+
+## Add your files
+
+* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
+* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+
+```
+cd existing_repo
+git remote add origin https://gitlab.com/rrl2026_high_level/irap_sunshine_nvv4l2.git
+git branch -M main
+git push -uf origin main
+```
+
+## Integrate with your tools
+
+* [Set up project integrations](https://gitlab.com/rrl2026_high_level/irap_sunshine_nvv4l2/-/settings/integrations)
+
+## Collaborate with your team
+
+* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
+* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
+* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
+* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
+* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+
+## Test and Deploy
+
+Use the built-in continuous integration in GitLab.
+
+* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
+* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
+* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
+* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
+* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+
+***
+
+# Editing this README
+
+When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+
+## Suggestions for a good README
+
+Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+
+## Name
+Choose a self-explaining name for your project.
+
+## Description
+Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+
+## Badges
+On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+
+## Visuals
+Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+
+## Installation
+Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+
+## Usage
+Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+
+## Support
+Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+
+## Roadmap
+If you have ideas for releases in the future, it is a good idea to list them in the README.
+
+## Contributing
+State if you are open to contributions and what your requirements are for accepting them.
+
+For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+
+You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+
+## Authors and acknowledgment
+Show your appreciation to those who have contributed to the project.
+
+## License
+For open source projects, say how it is licensed.
+
+## Project status
+If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+=======
 <div align="center">
   <img src="sunshine.png"  alt="Sunshine icon"/>
   <h1 align="center">Sunshine</h1>
-  <h4 align="center">Self-hosted game stream host for Moonlight.(Modify Sunshine to support NVIDIA Jetson Series)</h4>
+  <h4 align="center">Self-hosted game stream host for Moonlight.</h4>
 </div>
-
 
 <div align="center">
   <a href="https://github.com/LizardByte/Sunshine"><img src="https://img.shields.io/github/stars/lizardbyte/sunshine.svg?logo=github&style=for-the-badge" alt="GitHub stars"></a>
@@ -33,17 +127,75 @@ the local server or any mobile device.
 This fork adds native **Jetson nvv4l2 hardware encoder** support for NVIDIA Jetson Orin NX and AGX Orin, enabling
 low-latency H.264/HEVC streaming to Moonlight clients using the Jetson Multimedia API.
 
-Key features:
-- **NvVideoEncoder (V4L2 M2M)** direct hardware encoding, bypassing FFmpeg's avcodec layer
-- **VIC hardware color conversion** (BGRA to NV12), freeing the CPU
-- **DMA-BUF zero-copy** frame passing to the encoder
-- **Pipelined encode** overlapping CPU+VIC work with NVENC
-- **Web UI configuration** for all encoder settings
-
 Performance on Jetson Orin NX at 1080p: **60 FPS** (60fps target) / **137 FPS** (140fps target).
 
 See [installation.md](installation.md) for build and setup instructions,
-or [JETSON_README.md](JETSON_README.md) for detailed architecture documentation.
+or [JETSON_README.md](JETSON_README.md) for detailed architecture and pipeline documentation.
+
+#### What We Changed (Implementation Details)
+
+This section documents every file added or modified from upstream Sunshine to support the Jetson nvv4l2 encoder.
+
+**New files — Jetson encoder core** (`src/platform/linux/jetson/`):
+
+| File | What it does |
+|---|---|
+| `nvv4l2_encoder.h` | `NvV4L2HWEncoder` class — wraps NvVideoEncoder (V4L2 M2M) with pipelined encode, DMABUF and MMAP paths |
+| `nvv4l2_encoder.cpp` | Encoder init (wires all config: preset, rate control, two-pass CBR, IDR interval, SPS/PPS, max perf via `setHWPresetType()`, `setRateControlMode()`, `setControl()`, `setIDRInterval()`, `setInsertSpsPpsAtIdrEnabled()`, `setMaxPerfMode()`). Pipelined `encode_dmabuf()` queues frame N to NVENC while dequeuing frame N-1's encoded output. Fallback `encode_mmap()` for non-VIC path |
+| `nvv4l2_encode_device.h` | `nvv4l2_encode_device_t` struct — extends `avcodec_encode_device_t`, holds the encoder instance and VIC availability flag |
+| `nvv4l2_encode_device.cpp` | V4L2 M2M device probing (`find_v4l2_m2m_h264_encoder_fd()` scans `/dev/video*`), VIC availability probe (allocates test `NvBufSurface`), encoder factory `make_jetson_encode_device()` |
+
+**New files — Build system and web UI**:
+
+| File | What it does |
+|---|---|
+| `cmake/dependencies/jetson.cmake` | Auto-detects Jetson L4T Multimedia API libraries (`libnvmedia`, `libnvv4l2`, `libnvbufsurface`, `libnvbufsurftransform`, `libnvos`, `libnvbuf_utils`) and sample classes (`NvVideoEncoder.cpp`, `NvBufSurface.cpp`, etc.). Sets `SUNSHINE_BUILD_JETSON` and `HAVE_NVVIDEOENCO` compile definitions |
+| `src_assets/.../encoders/JetsonNvv4l2Encoder.vue` | Vue 3 component for the encoder settings tab — dropdowns for preset (1-4) and rate control (VBR/CBR), checkboxes for max perf / two-pass CBR / insert SPS+PPS, number input for IDR interval |
+
+**Modified files — Upstream Sunshine**:
+
+| File | What was changed |
+|---|---|
+| `src/video.cpp` | Added `jetson_encode_session_t` class: allocates BGRA and NV12 `NvBufSurface` DMA-BUFs, persistently maps the BGRA source to avoid per-frame Map/Unmap overhead, `convert_vic()` does CPU memcpy into DMA-BUF + VIC hardware BGRA-to-NV12 transform via `NvBufSurfTransform`, `convert_swscale()` fallback. Added `encode_jetson()` function with NAL-type parsing, separate output frame counter for Moonlight compatibility (no gaps in frameIndex). Added `packet_raw_generic` packet type for non-FFmpeg encoded data. Registered `nvv4l2` encoder in the encoder list |
+| `src/video.h` | Added `packet_raw_generic` struct (holds raw encoded frame data + frame index + IDR flag). Declared `nvv4l2` encoder extern |
+| `src/platform/common.h` | Added `mem_type_e::dma` enum value for DMA-BUF frames. Added `buf_fd` and `mem_type` fields to `img_t` under `#ifdef SUNSHINE_BUILD_JETSON` |
+| `src/config.h` | Added `config::video_t::nvv4l2` struct with 6 settings: `preset`, `rc_mode`, `max_perf`, `idr_interval`, `two_pass_cbr`, `insert_sps_pps` |
+| `src/config.cpp` | Added parsing for all 6 nvv4l2 config keys using `int_between_f()` and `bool_f()` |
+| `src/platform/linux/kmsgrab.cpp` | Added `#include "jetson/nvv4l2_encode_device.h"` for Jetson encoder device creation during KMS capture init |
+| `src/platform/linux/x11grab.cpp` | Added `#include "jetson/nvv4l2_encode_device.h"` for Jetson encoder device creation during X11 capture init |
+| `src/system_tray.cpp` | Added stub implementations for system tray functions when tray is disabled (`-DSUNSHINE_ENABLE_TRAY=OFF`) to prevent linker errors |
+| `cmake/compile_definitions/linux.cmake` | Added Jetson aarch64 detection: includes `jetson.cmake` on aarch64 Linux. Sets `SUNSHINE_PLATFORM="jetson"` (instead of `"linux"`) when `SUNSHINE_BUILD_JETSON` is on, so the web UI shows the correct encoder tabs |
+| `cmake/compile_definitions/common.cmake` | Minor adjustments for Jetson build compatibility |
+| `cmake/targets/common.cmake` | Ensured Jetson source files are included in the build target |
+| `cmake/FindSystemd.cmake` | Build fix for Jetson environment |
+| `tests/CMakeLists.txt` | Preserved global compiler flags during test builds (Clang 18 compatibility) |
+| `third-party/libdisplaydevice` | Patched `nlohmann::json` serialization for `std::optional` and nested structs under Clang 18 / libc++ |
+| `src_assets/.../configs/tabs/ContainerEncoders.vue` | Imported and registered `JetsonNvv4l2Encoder` component, renders on `currentTab === 'nvv4l2'` |
+| `src_assets/.../web/config.html` | Added `nvv4l2` tab definition with default option values. Added `"jetson"` platform filter that shows only general, input, av, network, files, advanced, nvv4l2, and sw tabs |
+| `src_assets/.../locale/en.json` | Added 12 locale keys for nvv4l2 settings labels and descriptions |
+
+#### Pipeline Architecture
+
+```
+Screen Capture (KMS / X11)
+    |
+    v
+BGRA frame (system memory)
+    |  memcpy into persistently-mapped DMA-BUF (~3ms)
+    v
+NvBufSurface (BGRA, DMA-BUF)
+    |  VIC hardware transform (~1ms)
+    v
+NvBufSurface (NV12, DMA-BUF)
+    |  V4L2_MEMORY_DMABUF zero-copy
+    v
+NvVideoEncoder (V4L2 M2M) [pipelined: encode N while preparing N+1]
+    |
+    v
+H.264/HEVC bitstream → RTP + FEC → UDP to Moonlight
+```
+
+The **pipelined encode** is the key optimization: frame N is queued to NVENC, then the *previous* frame's encoded output is dequeued (already finished while CPU+VIC prepared frame N). This overlaps the 4ms CPU+VIC work with the NVENC encode, making the effective frame interval `max(CPU+VIC, NVENC)` instead of `CPU+VIC + NVENC`.
 
 LizardByte has the full documentation hosted on [Read the Docs](https://docs.lizardbyte.dev/projects/sunshine)
 
@@ -418,3 +570,4 @@ Thank you to all the contributors who have helped make Sunshine better!
   <summary></summary>
   [TOC]
 </details>
+>>>>>>> first committed
